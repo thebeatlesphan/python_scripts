@@ -1,8 +1,8 @@
 # python_scripts
 
-##personal script
+## personal script
 
-###1.coordinates.py
+### 1.coordinates.py
 Small program that parses a table of coordinates of cities in the USA
 
 Example of one record...
@@ -14,5 +14,5 @@ The program parses this information to
 "city": "latitude longitude",
 ```
 
-###2.RPT086.py
+### 2.RPT086.py
 A simple .csv parser
