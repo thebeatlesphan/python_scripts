@@ -1,20 +1,42 @@
 import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
+import warnings
 
-#Read raw 'Incidents over 12 hours' report
-#Then create a df of Micheline's group and desired columns
-df = pd.read_excel("1.xlsx", usecols="N,A,D,B,G,L")
-group = ["Andy Phan", "Martel Perrin"]
-only_andy = df[df["Assigned to"].isin(group)]
-only_andy["Updates / Comments / NOTES"] = " "
-cols = only_andy.columns.tolist()
-myorder = [5, 0, 2, 1, 3, 4, 6]
-new_df = only_andy[cols].sort_values(by=["Assigned to"], ascending=True)
-new_df['Created'] = new_df['Created'].dt.strftime('%Y-%m-%d')
+import tkinter as tk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 
-#write df to excel and format the file to Michelines S: folder
-with pd.ExcelWriter("S:/NorcrossTAMS/MPhillips/12hour/new.xlsx") as writer:
+#Global variables
+filepath = ""
+df = ""
+
+def open_file():
+	global df
+
+	#Grab file and display filepath
+	select_file = askopenfilename()
+	file["text"] = select_file
+	filepath = select_file
+	btn_save["state"] = "normal"
+
+	#Create desired df from filepath
+	with warnings.catch_warnings(record=True):
+		df = pd.read_excel(filepath, usecols="N,A,D,B,G,L", engine="openpyxl")
+		group = []
+		desired_team = df[df["Assigned to"].isin(group)]
+		desired_team["Updates / Comments / NOTES"] = ""
+		cols = desired_team.columns.tolist()
+		myorder = [5,0,2,1,3,4,6]
+		cols = [cols[i] for i in myorder]
+		df = desired_team[cols].sort_values(by=["Assigned to"], ascending=True)
+		df["Created"] = df["Created"].dt.strftime('%Y-%m-%d')
+
+def save_file():
+	global df
+
+	save_file = asksaveasfilename(defaultextensions=".xlsx")
+
+	#Write df to excel and format it
 	new_df.to_excel(writer, index=False, sheet_name="andy")
 	worksheet = writer.sheets["andy"]
 	workbook = writer.book
@@ -33,3 +55,22 @@ with pd.ExcelWriter("S:/NorcrossTAMS/MPhillips/12hour/new.xlsx") as writer:
 	writer.sheets["andy"].set_column("F:F", 10, format)
 	writer.sheets["andy"].set_column("G:G", 40, format)
 	writer.save()
+
+#GUI for program
+window = tk.Tk()
+window.title("12hour")
+
+window.resizable(width=False, height=False)
+frame = tk.Frame(master=window, width=250, height=150)
+frame.pack()
+
+description = tk.Label(text="Micheline's Little Helper", font=8).place(x=20, y=20)
+
+file = tk.Label(master=frame, text=filepath, wraplength=250)
+file.place(x=0, y=100)
+
+btn_open = tk.Button(master=frame, text="Open", command=open_file).place(x=70, y=70)
+btn_save = tk.Button(master=frame, text="Save As...", command=save_file)
+btn_save.place(x=120, y=70)
+
+window.mainloop()
