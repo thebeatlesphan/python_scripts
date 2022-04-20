@@ -1,5 +1,10 @@
-from googlesearch import search
-for i in search("cat"):
-	print(i)
+from bs4 import BeautifulSoup
+import requests
 
-print("yeahhh")
+url = "https://www.tutorialspoint.com/index.htm"
+req = requests.get(url)
+soup = BeautifulSoup(req.text, "html.parser")
+print(soup.title)
+print()
+for link in soup.find_all('a'):
+	print(link.get('href'))
