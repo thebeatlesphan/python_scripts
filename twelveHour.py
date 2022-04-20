@@ -33,28 +33,29 @@ def open_file():
 
 def save_file():
 	global df
-
-	save_file = asksaveasfilename(defaultextensions=".xlsx")
+	save_as = text.get()
+	to_michelines = "S:/NorcrossTAMS/MPhillips/12hour/"+save_as+".xlsx"
 
 	#Write df to excel and format it
-	new_df.to_excel(writer, index=False, sheet_name="andy")
-	worksheet = writer.sheets["andy"]
-	workbook = writer.book
-	worksheet.set_default_row(45, hide_unused_rows=True)
-	worksheet.set_column('H:XFD', None, None, {'hidden': True})
-	worksheet.set_row(0, 14.4)
-	format = workbook.add_format({'text_wrap': True, 'bottom':1, 'top':1, 'left':1, 'right':1})
-	format.set_align('center')
-	format.set_align('vcenter')
+	with pd.ExcelWriter(to_michelines) as writer:
+		new_df.to_excel(writer, index=False, sheet_name="andy")
+		worksheet = writer.sheets["andy"]
+		workbook = writer.book
+		worksheet.set_default_row(45, hide_unused_rows=True)
+		worksheet.set_column('H:XFD', None, None, {'hidden': True})
+		worksheet.set_row(0, 14.4)
+		format = workbook.add_format({'text_wrap': True, 'bottom':1, 'top':1, 'left':1, 'right':1})
+		format.set_align('center')
+		format.set_align('vcenter')
 
-	writer.sheets["andy"].set_column("A:A", 15, format)
-	writer.sheets["andy"].set_column("B:B", 15, format)
-	writer.sheets["andy"].set_column("C:C", 20, format)
-	writer.sheets["andy"].set_column("D:D", 40, format)
-	writer.sheets["andy"].set_column("E:E", 40, format)
-	writer.sheets["andy"].set_column("F:F", 10, format)
-	writer.sheets["andy"].set_column("G:G", 40, format)
-	writer.save()
+		writer.sheets["andy"].set_column("A:A", 15, format)
+		writer.sheets["andy"].set_column("B:B", 15, format)
+		writer.sheets["andy"].set_column("C:C", 20, format)
+		writer.sheets["andy"].set_column("D:D", 40, format)
+		writer.sheets["andy"].set_column("E:E", 40, format)
+		writer.sheets["andy"].set_column("F:F", 10, format)
+		writer.sheets["andy"].set_column("G:G", 40, format)
+		writer.save()
 
 #GUI for program
 window = tk.Tk()
@@ -66,11 +67,14 @@ frame.pack()
 
 description = tk.Label(text="Micheline's Little Helper", font=8).place(x=20, y=20)
 
-file = tk.Label(master=frame, text=filepath, wraplength=250)
-file.place(x=0, y=100)
-
 btn_open = tk.Button(master=frame, text="Open", command=open_file).place(x=70, y=70)
 btn_save = tk.Button(master=frame, text="Save As...", command=save_file)
 btn_save.place(x=120, y=70)
+
+text = tk.Entry(width=39)
+text.place(x=4,y=110)
+
+file = tk.Label(master=frame, text=filepath, wraplength=250)
+file.place(x=0, y=130)
 
 window.mainloop()

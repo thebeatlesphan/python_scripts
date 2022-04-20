@@ -1,3 +1,5 @@
 from googlesearch import search
-print(search("cat"))
+for i in search("cat"):
+	print(i)
 
+print("yeahhh")
