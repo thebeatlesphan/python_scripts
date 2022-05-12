@@ -1,15 +1,26 @@
+# Name: twelveHour.py
+# Details: Program to transform the daily 12 hour incident RPT into Micheline's own report.
+# Author: Andy Phan
+# Created 2022-5-06
+
+'''
+May 7th, 2022
+- Removed "Justin Quesada" and "Fernando Robles" from group variable
+- Added condition to format date "Created" column to change font color if >= 25 days ago
+'''
+
 import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
 import warnings
-
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
+from datetime import date, timedelta
 
 #Global variables
 filepath = ""
 df = ""
-
+today = date.today() # - timedelta(25)
 def open_file():
 	global df
 
@@ -22,7 +33,7 @@ def open_file():
 	#Create desired df from filepath
 	with warnings.catch_warnings(record=True):
 		df = pd.read_excel(filepath, usecols="N,A,D,B,G,L", engine="openpyxl")
-		group = []
+		group = ["Andy Phan", "Martel Perrin", "Andrew Plourde", "Antoine Adderley", "Cedell Okegbenro", "Christopher De Guzman", "Clarence Spearman", "James Thompson1", "Maya Mattison", "Preston Hook", "Ron Wells", "Tim Stoklas", "Zachary Brown"]
 		desired_team = df[df["Assigned to"].isin(group)]
 		desired_team["Updates / Comments / NOTES"] = ""
 		cols = desired_team.columns.tolist()
@@ -72,7 +83,7 @@ btn_save = tk.Button(master=frame, text="Save As...", command=save_file)
 btn_save.place(x=120, y=70)
 
 text = tk.Entry(width=39)
-text.place(x=4,y=110)
+text.place(x=4, y=110)
 
 file = tk.Label(master=frame, text=filepath, wraplength=250)
 file.place(x=0, y=130)
