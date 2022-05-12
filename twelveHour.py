@@ -2,6 +2,7 @@
 # Details: Program to transform the daily 12 hour incident RPT into Micheline's own report.
 # Author: Andy Phan
 # Created 2022-5-06
+# Compile the program to an exe via auto-python-to-exe library
 
 '''
 May 7th, 2022
