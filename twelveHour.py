@@ -21,7 +21,8 @@ from datetime import date, timedelta
 #Global variables
 filepath = ""
 df = ""
-today = date.today() # - timedelta(25)
+today = str(date.today() - timedelta(25))
+
 def open_file():
 	global df
 
@@ -59,7 +60,8 @@ def save_file():
 		format = workbook.add_format({'text_wrap': True, 'bottom':1, 'top':1, 'left':1, 'right':1})
 		format.set_align('center')
 		format.set_align('vcenter')
-
+		red_format = workbook.add_format({'font_color': 'red'})
+		worksheet.conditional_format("C2:C500", {'type': 'cell', 'critieria': '<=', 'value': '$H$2', 'format': red_format})
 		writer.sheets["andy"].set_column("A:A", 15, format)
 		writer.sheets["andy"].set_column("B:B", 15, format)
 		writer.sheets["andy"].set_column("C:C", 20, format)
@@ -67,7 +69,8 @@ def save_file():
 		writer.sheets["andy"].set_column("E:E", 40, format)
 		writer.sheets["andy"].set_column("F:F", 10, format)
 		writer.sheets["andy"].set_column("G:G", 40, format)
-		writer.save()
+		
+	file["text"] = 'DONE'
 
 #GUI for program
 window = tk.Tk()
